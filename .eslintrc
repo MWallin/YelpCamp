@@ -20,7 +20,7 @@
             "double"
         ],
         "semi": [
-            "error",
+            "off",
             "always"
         ],
         "eqeqeq": [
