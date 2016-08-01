@@ -26,7 +26,7 @@ app.get( "/", function ( req, res ) {
 })
 
 
-app.get("/campgrounds", function ( req, res ) {
+app.get( "/campgrounds", function ( req, res ) {
 
   const campgrounds = [
     {
@@ -43,9 +43,12 @@ app.get("/campgrounds", function ( req, res ) {
     },
   ]
 
-  res.render( "campgrounds" )
+  res.render( "campgrounds", {
+    campgrounds: campgrounds
+  })
 
 })
+
 
 
 
