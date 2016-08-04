@@ -126,7 +126,7 @@
           { "align": "colon" }
         ],
         "no-multi-spaces":
-          "error"
+          "off"
 
     }
 }
