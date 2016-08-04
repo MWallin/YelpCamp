@@ -1,13 +1,13 @@
 {
   "files.exclude": {
-    "node_modules/": true,
-    ".vscode/": true,
-    "typings/": true,
-    ".eslint*": true,
-    ".gitignore": true,
-    ".stylelintrc": true,
-    "jsconfig.json": true,
-    "package.json": true,
-    "README.md": true
+    "node_modules/": false,
+    ".vscode/": false,
+    "typings/": false,
+    ".eslint*": false,
+    ".gitignore": false,
+    ".stylelintrc": false,
+    "jsconfig.json": false,
+    "package.json": false,
+    "README.md": false
   }
 }
