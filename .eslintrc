@@ -98,7 +98,7 @@
           "error"
         ,
         "no-trailing-spaces":
-          "error"
+          "off"
         ,
         "object-property-newline":
           "error"
@@ -127,6 +127,9 @@
         ],
         "no-multi-spaces":
           "off"
+        ,
+        "no-unused-vars":
+          "warn"
 
     }
 }
