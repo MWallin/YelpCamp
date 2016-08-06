@@ -38,12 +38,13 @@ seedDB()
 
 
 
+
 // *****************************************************************************
 // *****************************************************************************
 // Model imports
 
 const Campground = require( "./models/campground" )
-const Comment = require( "./models/comment" )
+const Comment    = require( "./models/comment" )
 
 
 
@@ -56,10 +57,11 @@ app.get( "/", function ( req, res ) {
 
   res.render( "landing" )
 
-
 })
 
 
+// -----------------------------------------------------------------------------
+// Campground routes
 
 // Index -- Show all items
 app.get( "/campgrounds", function ( req, res ) {
@@ -71,12 +73,12 @@ app.get( "/campgrounds", function ( req, res ) {
 
       if ( err ) {
 
-        console.log( "Error: " + err )
+        console.log( `Error: ${err}` )
 
       } else {
 
         // Render campgrounds
-        res.render( "index", {
+        res.render( "campgrounds/index", {
           campgrounds: allCampgrounds
         })
 
@@ -135,7 +137,7 @@ app.post( "/campgrounds", function ( req, res ) {
 //NEW -- Form for making a new item
 app.get( "/campgrounds/new", function ( req, res ) {
 
-  res.render( "new" )
+  res.render( "campgrounds/new" )
 
 
 })
@@ -161,7 +163,7 @@ app.get( "/campgrounds/:id", ( req, res ) => {
         } else {
 
           // Render show template for that campground
-          res.render( "show", {
+          res.render( "campgrounds/show", {
             campground: foundCampground
           })
 
@@ -171,6 +173,77 @@ app.get( "/campgrounds/:id", ( req, res ) => {
 
 
 })
+
+// -----------------------------------------------------------------------------
+// Comments routes
+
+app.get( "/campgrounds/:id/comments/new", ( req, res ) => {
+
+  // Get data from the request
+  const findID = req.params.id
+
+  // Find campground with provided ID
+  Campground.findById( findID, ( err, foundCampground ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+    } else {
+
+      res.render( "comments/new", {
+        campground: foundCampground
+      })
+
+    }
+  })
+
+
+})
+
+
+app.post( "/campgrounds/:id/comments", ( req, res ) => {
+
+  // Get data from the request
+  const findID = req.params.id
+  const createComment = req.body.comment
+
+  // Find campground with provided ID
+  Campground.findById( findID, ( err, foundCampground ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+      res.redirect( "/campgrounds" )
+
+    } else {
+
+      Comment.create(
+        createComment,
+        ( err, newComment ) => {
+
+          if ( err ) {
+
+            console.log( `ERROR: ${err}` )
+
+          } else {
+
+            foundCampground.comments.push( newComment )
+            foundCampground.save()
+
+            res.redirect( `/campgrounds/${foundCampground._id}` )
+
+          }
+
+        })
+
+    }
+  })
+
+
+})
+
 
 
 

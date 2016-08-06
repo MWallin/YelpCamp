@@ -1,6 +1,6 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
-  <a href="/campgrounds">Back to campgrounds</a>
+  <a class="btn btn-info" href="/campgrounds">Back to campgrounds</a>
 
 
   <!-- #################################################################### -->
@@ -23,6 +23,11 @@
   <!-- #################################################################### -->
   <!-- Comment data -->
 
+  <a href="/campgrounds/<%= campground._id %>/comments/new" class="btn btn-success">
+    Add new comment
+  </a>
+
+
   <% campground.comments.forEach( comment => { %>
 
     <p>
@@ -33,8 +38,7 @@
 
   <% }) %>
 
-
   <!-- #################################################################### -->
 
 
-<% include partials/footer %>
+<% include ../partials/footer %>
