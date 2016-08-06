@@ -1,0 +1,41 @@
+
+/* ######################################################################### */
+/* Global styling */
+
+body {
+  background: #E4E8EB;
+}
+
+
+
+/* ######################################################################### */
+/* Begun restyle navbar */
+
+.navbar-default {
+  background: #3B3F3C;
+}
+
+.navbar-default .navbar-brand {
+  color: #E4E8EB;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #E4E8EB;
+}
+
+
+
+/* ######################################################################### */
+/* Thumbnail styling */
+
+.thumbnail img {
+  width: 100%;
+}
+
+.thumbnail {
+  padding: 0;
+}
+
+.thumbnail .caption-full {
+  padding: 9px;
+}

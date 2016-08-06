@@ -1,44 +1,110 @@
 <% include ../partials/header %>
 
-  <a class="btn btn-info" href="/campgrounds">Back to campgrounds</a>
+
+  <div class="container">
+
+    <div class="row">
+
+      <!-- ################################################################### -->
+      <!-- ################################################################### -->
+      <!-- Sidebar -->
+      <div class="col-md-3">
 
 
-  <!-- #################################################################### -->
-  <!-- Campground data -->
+        <p class="lead">Yelp Camp</p>
 
-  <div>
+        <div class="list-group">
 
-    <h1><%=campground.name%></h1>
+          <li class="list-group-item active">Info 1</li>
+          <li class="list-group-item">Info 2</li>
+          <li class="list-group-item">Info 3</li>
 
-    <img src="<%=campground.image%>" alt="">
+        </div>
 
-    <p>
-      <%=campground.description%>
-    </p>
+        <p>MAP</p>
+
+      </div>
+      <!-- ################################################################### -->
+
+      <!-- ################################################################### -->
+      <!-- ################################################################### -->
+      <!-- Main content -->
+      <div class="col-md-9">
+
+        <!-- ################################################################# -->
+        <!-- ################################################################# -->
+        <!-- Campground data -->
+        <div class="thumbnail">
+
+
+          <img class="img-responsive" src="<%=campground.image%>" alt="">
+
+          <div class="caption-full">
+
+            <h4 class="pull-right">PRICE</h4>
+
+            <h4><a href=""><%=campground.name%></a></h1>
+
+            <p><%=campground.description%></p>
+
+
+            <a class="btn btn-info" href="/campgrounds">Back to campgrounds</a>
+
+          </div>
+
+
+        </div>
+        <!-- ################################################################# -->
+
+        <!-- ################################################################# -->
+        <!-- ################################################################# -->
+        <!-- Comment data -->
+        <div class="well">
+
+
+          <div class="text-right">
+
+            <a href="/campgrounds/<%= campground._id %>/comments/new" class="btn btn-success">
+              Add new comment
+            </a>
+
+          </div>
+
+          <hr>
+
+          <% campground.comments.forEach( comment => { %>
+
+            <div class="row">
+
+              <div class="col-md-12">
+
+                <strong>
+                  <%= comment.author %>
+                </strong>
+
+                <span class="pull-right">X days ago</span>
+
+                <p>
+                  "<%= comment.text %>"
+                </p>
+
+              </div>
+
+            </div>
+
+          <% }) %>
+
+
+        </div>
+        <!-- ################################################################# -->
+
+
+      </div>
+      <!-- ################################################################### -->
+
+    </div>
 
   </div>
-
-  <!-- #################################################################### -->
-
-  <!-- #################################################################### -->
-  <!-- Comment data -->
-
-  <a href="/campgrounds/<%= campground._id %>/comments/new" class="btn btn-success">
-    Add new comment
-  </a>
-
-
-  <% campground.comments.forEach( comment => { %>
-
-    <p>
-
-      "<%= comment.text %>" - <strong><%= comment.author %></strong>
-
-    </p>
-
-  <% }) %>
-
-  <!-- #################################################################### -->
 
 
 <% include ../partials/footer %>
