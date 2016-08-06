@@ -5,11 +5,14 @@
 // *****************************************************************************
 // Requires and basics
 
+// Externals
 const express    = require( "express" )
 const bodyParser = require( "body-parser" )
 const mongoose   = require( "mongoose" )
 
-const app = express()
+
+// Own modules
+const seedDB =  require( "./seeds" )
 
 
 
@@ -18,47 +21,29 @@ const app = express()
 // *****************************************************************************
 // App setup
 
+const app = express()
+
+
 app.set( "view engine", "ejs" );
 
 app.use( bodyParser.urlencoded({extended: true}) )
 
+
 mongoose.connect( "mongodb://localhost/yelp_camp" )
 
 
+// Seed the database
+seedDB()
+
+
 
 
 // *****************************************************************************
 // *****************************************************************************
-// Schema setup
+// Model imports
 
-const campgroundSchema = new mongoose.Schema({
-  name       : String,
-  image      : String,
-  description: String
-})
-
-const Campground = mongoose.model( "Campground", campgroundSchema )
-
-
-// Campground.create(
-//   {
-//     name       : "Beachside",
-//     image      : "http://www.knightsnotes.com/Hawaii%20Trip/Campsite%20Near%20Beach.jpg",
-//     description: "Just near the sea, a beuatiful, but haunted place. Also, no toiletts."
-//   },
-//   ( err, campground ) => {
-
-//     if ( err ) {
-//       console.log( err )
-
-//     } else {
-//       console.log( "New campground: " )
-//       console.log( campground )
-
-//     }
-//   }
-
-// )
+const Campground = require( "./models/campground" )
+const Comment = require( "./models/comment" )
 
 
 
@@ -85,19 +70,20 @@ app.get( "/campgrounds", function ( req, res ) {
     ( err, allCampgrounds ) => {
 
       if ( err ) {
+
         console.log( "Error: " + err )
 
       } else {
+
         // Render campgrounds
         res.render( "index", {
           campgrounds: allCampgrounds
         })
 
       }
-
     }
-
   )
+
 
 })
 
@@ -125,10 +111,12 @@ app.post( "/campgrounds", function ( req, res ) {
     ( err, newlyCreated ) => {
 
       if ( err ) {
+
         console.log( "Something went wrong" );
         console.log( err );
 
       } else {
+
         console.log( "New campground" );
         console.log( newlyCreated );
 
@@ -136,10 +124,9 @@ app.post( "/campgrounds", function ( req, res ) {
         res.redirect( "/campgrounds" )
 
       }
-
     }
-
   )
+
 
 })
 
@@ -162,24 +149,25 @@ app.get( "/campgrounds/:id", ( req, res ) => {
   const findID = req.params.id
 
   // Find campground with provided ID
-  Campground.findById(
-    findID,
-    ( err, foundCampground ) => {
+  Campground.findById( findID )
+    .populate( "comments" )
+    .exec(
+      ( err, foundCampground ) => {
 
-      if ( err ) {
-        console.log( "Error" + err );
+        if ( err ) {
 
-      } else {
-        res.render( "show", {
-          campground: foundCampground
-        })
+          console.log( "Error" + err );
 
+        } else {
+
+          // Render show template for that campground
+          res.render( "show", {
+            campground: foundCampground
+          })
+
+        }
       }
-
-    }
-  )
-
-  // Render show template for that campground
+    )
 
 
 })
