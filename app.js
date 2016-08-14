@@ -7,6 +7,7 @@
 
 // Externals
 const expressSession = require( "express-session" )
+const methodOverride = require( "method-override" )
 const LocalStrategy  = require( "passport-local" )
 const bodyParser     = require( "body-parser" )
 const mongoose       = require( "mongoose" )
@@ -29,9 +30,9 @@ const app = express()
 
 app.set( "view engine", "ejs" );
 
-app.use( bodyParser.urlencoded({extended: true}) )
 app.use( express.static( __dirname + "/public" ) )
-
+app.use( bodyParser.urlencoded({extended: true}) )
+app.use( methodOverride( "_method" ) )
 
 // Seed the database
 // seedDB()

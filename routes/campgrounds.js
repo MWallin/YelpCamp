@@ -39,6 +39,42 @@ function isLoggedIn( req, res, next ) {
   }
 }
 
+function isCampgroundOwner ( req, res, next ) {
+
+  // Get data from the request
+  const currentCampground = req.params.id
+  const currentUser = req.user
+
+  if ( req.isAuthenticated() ) {
+
+    Campground.findById( currentCampground, ( err, foundCampground ) => {
+
+      if ( err ) {
+
+        console.log( `ERROR: ${err}` )
+
+        res.redirect( "back" )
+
+      } else if ( foundCampground.creator.id.equals( currentUser._id ) ) {
+
+        next()
+
+      } else {
+
+        res.redirect( "back" )
+
+      }
+
+    })
+
+  } else {
+
+    res.redirect( "back" )
+
+  }
+
+}
+
 
 
 
@@ -73,6 +109,8 @@ router.get( "/", function ( req, res ) {
 })
 
 
+
+
 //NEW -- Form for making a new item
 router.get( "/new", isLoggedIn, function ( req, res ) {
 
@@ -80,6 +118,7 @@ router.get( "/new", isLoggedIn, function ( req, res ) {
 
 
 })
+
 
 
 
@@ -126,8 +165,6 @@ router.post( "/", isLoggedIn, function ( req, res ) {
 
 
 
-
-
 // SHOW -- Show details about one item
 router.get( "/:id", ( req, res ) => {
 
@@ -158,6 +195,84 @@ router.get( "/:id", ( req, res ) => {
 
 })
 
+
+
+
+// Edit one item
+router.get( "/:id/edit", isCampgroundOwner, ( req, res ) => {
+
+  const currentCampground = req.params.id
+
+  Campground.findById( currentCampground, ( err, foundCampground ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+      res.redirect( "/campgrounds" )
+
+    } else {
+
+      res.render( "campgrounds/edit", {
+        campground: foundCampground
+      })
+
+    }
+
+  })
+})
+
+
+
+
+// Update one item
+router.put( "/:id", isCampgroundOwner, ( req, res ) => {
+
+  const currentCampground = req.params.id
+  const updatesToCampground = req.body.campground
+
+  // Find campground and Update
+  Campground.findByIdAndUpdate( currentCampground, updatesToCampground, ( err, updatedCampground ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+      res.redirect( "/campgrounds" )
+
+    } else {
+
+      // Redirect to show page
+      res.redirect( `/campgrounds/${currentCampground}` )
+
+    }
+
+  })
+})
+
+
+
+
+// Delete one item
+router.delete( "/:id", isCampgroundOwner, ( req, res ) => {
+
+  const currentCampground = req.params.id
+
+  Campground.findByIdAndRemove( currentCampground, ( err ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+    } else {
+
+      //Redirect
+      res.redirect( "/campgrounds" )
+
+    }
+
+  })
+})
 
 
 
