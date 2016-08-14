@@ -76,6 +76,7 @@ router.post( "/", isLoggedIn, ( req, res ) => {
   // Get data from the request
   const findID = req.params.id
   const createComment = req.body.comment
+  const currentUser = req.user
 
   // Find campground with provided ID
   Campground.findById( findID, ( err, foundCampground ) => {
@@ -98,6 +99,16 @@ router.post( "/", isLoggedIn, ( req, res ) => {
 
           } else {
 
+            // Add user to comment and save to it
+            newComment.author.id = currentUser._id
+            newComment.author.username = currentUser.username
+
+            newComment.save()
+
+            console.log( "NEW COMMENT" )
+            console.log( newComment )
+
+            // Add comment to campground
             foundCampground.comments.push( newComment )
             foundCampground.save()
 

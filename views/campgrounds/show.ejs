@@ -10,8 +10,11 @@
       <!-- Sidebar -->
       <div class="col-md-3">
 
-
         <p class="lead">Yelp Camp</p>
+
+        <a class="btn btn-info" href="/campgrounds">Back to campgrounds</a>
+
+        <hr>
 
         <div class="list-group">
 
@@ -47,8 +50,10 @@
 
             <p><%=campground.description%></p>
 
+            <p><em>
+              Submitted by <%= campground.creator.username %>
+            </em></p>
 
-            <a class="btn btn-info" href="/campgrounds">Back to campgrounds</a>
 
           </div>
 
@@ -79,7 +84,7 @@
               <div class="col-md-12">
 
                 <strong>
-                  <%= comment.author %>
+                  <%= comment.author.username %>
                 </strong>
 
                 <span class="pull-right">X days ago</span>

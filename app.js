@@ -15,7 +15,7 @@ const express        = require( "express" )
 
 // -----------------------------------------------------------------------------
 // Own modules
-const seedDB =  require( "./seeds" )
+// const seedDB =  require( "./seeds" )
 
 
 
@@ -34,7 +34,7 @@ app.use( express.static( __dirname + "/public" ) )
 
 
 // Seed the database
-seedDB()
+// seedDB()
 
 
 

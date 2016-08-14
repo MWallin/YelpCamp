@@ -15,7 +15,14 @@ const campgroundSchema = mongoose.Schema({
   name       : String,
   image      : String,
   description: String,
-  comments   : [
+  creator    : {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref : "User"
+    },
+    username: String
+  },
+  comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref : "Comment"

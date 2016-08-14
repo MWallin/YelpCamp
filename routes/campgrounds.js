@@ -24,6 +24,26 @@ const Campground = require( "../models/campground" )
 
 // *****************************************************************************
 // *****************************************************************************
+// Middleware
+
+function isLoggedIn( req, res, next ) {
+
+  if ( req.isAuthenticated() ) {
+
+    next()
+
+  } else {
+
+    res.redirect( "/login" )
+
+  }
+}
+
+
+
+
+// *****************************************************************************
+// *****************************************************************************
 // Campground routes
 
 // Index -- Show all items
@@ -36,7 +56,7 @@ router.get( "/", function ( req, res ) {
 
       if ( err ) {
 
-        console.log( `Error: ${err}` )
+        console.log( `ERROR: ${err}` )
 
       } else {
 
@@ -54,7 +74,7 @@ router.get( "/", function ( req, res ) {
 
 
 //NEW -- Form for making a new item
-router.get( "/new", function ( req, res ) {
+router.get( "/new", isLoggedIn, function ( req, res ) {
 
   res.render( "campgrounds/new" )
 
@@ -64,19 +84,23 @@ router.get( "/new", function ( req, res ) {
 
 
 // Create -- Add a new item to the database
-router.post( "/", function ( req, res ) {
+router.post( "/", isLoggedIn, function ( req, res ) {
 
   // Get data from the request
   const name  = req.body.campName
   const image = req.body.campImage
   const description = req.body.campDesc
-
+  const currentUser = req.user
 
   // Make an object from the caught data
   const newCampground = {
     name       : name,
     image      : image,
-    description: description
+    description: description,
+    creator    : {
+      id      : currentUser._id,
+      username: currentUser.username
+    }
   }
 
   // Add campground to database
@@ -86,15 +110,10 @@ router.post( "/", function ( req, res ) {
 
       if ( err ) {
 
-        console.log( "Something went wrong" );
-        console.log( err );
+        console.log( `ERROR: ${err}` )
 
       } else {
 
-        console.log( "New campground" );
-        console.log( newlyCreated );
-
-        // Send user to the campg site
         res.redirect( "/campgrounds" )
 
       }
@@ -123,7 +142,7 @@ router.get( "/:id", ( req, res ) => {
 
         if ( err ) {
 
-          console.log( "Error" + err );
+          console.log( `ERROR: ${err}` )
 
         } else {
 
