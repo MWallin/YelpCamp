@@ -7,6 +7,7 @@ const mongoose = require( "mongoose" )
 
 
 
+
 // ****************************************************************************
 // Schema definition
 
@@ -21,6 +22,7 @@ const campgroundSchema = mongoose.Schema({
     }
   ]
 })
+
 
 
 
