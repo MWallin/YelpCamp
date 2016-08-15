@@ -13,10 +13,11 @@ const bodyParser     = require( "body-parser" )
 const mongoose       = require( "mongoose" )
 const passport       = require( "passport" )
 const express        = require( "express" )
+const flash          = require( "connect-flash" )
 
-// -----------------------------------------------------------------------------
 // Own modules
 // const seedDB =  require( "./seeds" )
+const middleware = require( "./middleware" )
 
 
 
@@ -33,6 +34,7 @@ app.set( "view engine", "ejs" );
 app.use( express.static( __dirname + "/public" ) )
 app.use( bodyParser.urlencoded({extended: true}) )
 app.use( methodOverride( "_method" ) )
+app.use( flash() )
 
 // Seed the database
 // seedDB()
@@ -47,7 +49,7 @@ app.use( methodOverride( "_method" ) )
 mongoose.connect( "mongodb://localhost/yelp_camp" )
 
 
-const User       = require( "./models/user" )
+const User = require( "./models/user" )
 
 
 
@@ -70,22 +72,7 @@ passport.serializeUser( User.serializeUser() )
 passport.deserializeUser( User.deserializeUser() )
 
 
-app.use( addCurrentUser )
-
-
-
-// *****************************************************************************
-// *****************************************************************************
-// Middleware
-
-
-function addCurrentUser ( req, res, next ) {
-
-  res.locals.currentUser = req.user;
-
-  next();
-
-}
+app.use( middleware.addCurrentUser )
 
 
 
@@ -95,8 +82,8 @@ function addCurrentUser ( req, res, next ) {
 // Router setup
 
 const campgroundRoutes = require( "./routes/campgrounds" )
-const commentRoutes = require( "./routes/comments" )
-const indexRoutes = require( "./routes/index" )
+const commentRoutes    = require( "./routes/comments" )
+const indexRoutes      = require( "./routes/index" )
 
 
 app.use( "/", indexRoutes )

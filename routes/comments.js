@@ -4,7 +4,11 @@
 // *****************************************************************************
 // Requires and basics
 
+//Externals
 const express = require( "express" )
+
+// Own modules
+const middleware = require( "../middleware" )
 
 
 
@@ -24,29 +28,9 @@ const Comment    = require( "../models/comment" )
 
 // *****************************************************************************
 // *****************************************************************************
-// Middleware
-
-function isLoggedIn( req, res, next ) {
-
-  if ( req.isAuthenticated() ) {
-
-    next()
-
-  } else {
-
-    res.redirect( "/login" )
-
-  }
-}
-
-
-
-
-// *****************************************************************************
-// *****************************************************************************
 // Comments routes
 
-router.get( "/new", isLoggedIn, ( req, res ) => {
+router.get( "/new", middleware.isLoggedIn, ( req, res ) => {
 
   // Get data from the request
   const findID = req.params.id
@@ -71,7 +55,9 @@ router.get( "/new", isLoggedIn, ( req, res ) => {
 })
 
 
-router.post( "/", isLoggedIn, ( req, res ) => {
+
+
+router.post( "/", middleware.isLoggedIn, ( req, res ) => {
 
   // Get data from the request
   const findID = req.params.id
@@ -124,6 +110,90 @@ router.post( "/", isLoggedIn, ( req, res ) => {
 
 })
 
+
+
+
+// Edit comment
+router.get( "/:comment_id/edit", middleware.isCommentOwner, ( req, res ) => {
+
+  const currentCampground = req.params.id
+  const currentComment = req.params.comment_id
+
+
+  Comment.findById( currentComment, ( err, foundComment ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+      res.redirect( "back" )
+
+    } else {
+
+      res.render( "comments/edit", {
+        comment     : foundComment,
+        campgroundId: currentCampground
+      })
+
+    }
+
+  })
+})
+
+
+
+
+// Update comment
+router.put( "/:comment_id", middleware.isCommentOwner, ( req, res ) => {
+
+  const currentCampground = req.params.id
+  const currentComment    = req.params.comment_id
+  const updatesToComment  = req.body.comment
+
+
+  Comment.findByIdAndUpdate( currentComment, updatesToComment, ( err, updatedComment ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+      res.redirect( "back" )
+
+    } else {
+
+      // Redirect to show page
+      res.redirect( `/campgrounds/${currentCampground}` )
+
+    }
+
+  })
+
+})
+
+
+
+
+// Delete comment
+router.delete( "/:comment_id", middleware.isCommentOwner, ( req, res ) => {
+
+  const currentCampground = req.params.id
+  const currentComment    = req.params.comment_id
+
+  Comment.findByIdAndRemove( currentComment, ( err ) => {
+
+    if ( err ) {
+
+      console.log( `ERROR: ${err}` )
+
+    } else {
+
+      //Redirect
+      res.redirect( `/campgrounds/${currentCampground}` )
+
+    }
+
+  })
+})
 
 
 

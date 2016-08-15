@@ -1,11 +1,14 @@
 "use strict"
 
-
 // *****************************************************************************
 // *****************************************************************************
 // Requires and basics
 
+//Externals
 const express = require( "express" )
+
+// Own modules
+const middleware = require( "../middleware" )
 
 
 
@@ -18,62 +21,6 @@ const router = express.Router()
 
 
 const Campground = require( "../models/campground" )
-
-
-
-
-// *****************************************************************************
-// *****************************************************************************
-// Middleware
-
-function isLoggedIn( req, res, next ) {
-
-  if ( req.isAuthenticated() ) {
-
-    next()
-
-  } else {
-
-    res.redirect( "/login" )
-
-  }
-}
-
-function isCampgroundOwner ( req, res, next ) {
-
-  // Get data from the request
-  const currentCampground = req.params.id
-  const currentUser = req.user
-
-  if ( req.isAuthenticated() ) {
-
-    Campground.findById( currentCampground, ( err, foundCampground ) => {
-
-      if ( err ) {
-
-        console.log( `ERROR: ${err}` )
-
-        res.redirect( "back" )
-
-      } else if ( foundCampground.creator.id.equals( currentUser._id ) ) {
-
-        next()
-
-      } else {
-
-        res.redirect( "back" )
-
-      }
-
-    })
-
-  } else {
-
-    res.redirect( "back" )
-
-  }
-
-}
 
 
 
@@ -112,7 +59,7 @@ router.get( "/", function ( req, res ) {
 
 
 //NEW -- Form for making a new item
-router.get( "/new", isLoggedIn, function ( req, res ) {
+router.get( "/new", middleware.isLoggedIn, function ( req, res ) {
 
   res.render( "campgrounds/new" )
 
@@ -123,7 +70,7 @@ router.get( "/new", isLoggedIn, function ( req, res ) {
 
 
 // Create -- Add a new item to the database
-router.post( "/", isLoggedIn, function ( req, res ) {
+router.post( "/", middleware.isLoggedIn, function ( req, res ) {
 
   // Get data from the request
   const name  = req.body.campName
@@ -199,7 +146,7 @@ router.get( "/:id", ( req, res ) => {
 
 
 // Edit one item
-router.get( "/:id/edit", isCampgroundOwner, ( req, res ) => {
+router.get( "/:id/edit", middleware.isCampgroundOwner, ( req, res ) => {
 
   const currentCampground = req.params.id
 
@@ -226,7 +173,7 @@ router.get( "/:id/edit", isCampgroundOwner, ( req, res ) => {
 
 
 // Update one item
-router.put( "/:id", isCampgroundOwner, ( req, res ) => {
+router.put( "/:id", middleware.isCampgroundOwner, ( req, res ) => {
 
   const currentCampground = req.params.id
   const updatesToCampground = req.body.campground
@@ -254,7 +201,7 @@ router.put( "/:id", isCampgroundOwner, ( req, res ) => {
 
 
 // Delete one item
-router.delete( "/:id", isCampgroundOwner, ( req, res ) => {
+router.delete( "/:id", middleware.isCampgroundOwner, ( req, res ) => {
 
   const currentCampground = req.params.id
 
