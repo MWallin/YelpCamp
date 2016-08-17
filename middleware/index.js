@@ -33,6 +33,9 @@ const middlewareObj = {
 
           console.log( `ERROR: ${err}` )
 
+
+          req.flash( "error", "Campground not found" )
+
           res.redirect( "back" )
 
 
@@ -43,6 +46,8 @@ const middlewareObj = {
 
         } else {
 
+          req.flash( "error", "You don't have permission to do that" )
+
           res.redirect( "back" )
 
 
@@ -51,6 +56,8 @@ const middlewareObj = {
       })
 
     } else {
+
+      req.flash( "error", "You need to be logged in to do that" )
 
       res.redirect( "back" )
 
@@ -79,6 +86,9 @@ const middlewareObj = {
 
           console.log( `ERROR: ${err}` )
 
+
+          req.flash( "error", "Cannot find comment in the database" )
+
           res.redirect( "back" )
 
 
@@ -89,6 +99,8 @@ const middlewareObj = {
 
         } else {
 
+          req.flash( "error", "You don't have permission to do that" )
+
           res.redirect( "back" )
 
 
@@ -97,6 +109,8 @@ const middlewareObj = {
       })
 
     } else {
+
+      req.flash( "error", "You need to be logged in to do that" )
 
       res.redirect( "back" )
 
@@ -120,7 +134,7 @@ const middlewareObj = {
 
     } else {
 
-      req.flash( "error", "You must login first!" )
+      req.flash( "error", "You need to be logged in to do that" )
 
       res.redirect( "/login" )
 

@@ -62,12 +62,16 @@ router.route( "/register" )
 
         console.log( `ERROR: ${err}` )
 
+        req.flash( "error", err.message )
+
         res.redirect( "/register" )
 
 
       } else {
 
         passport.authenticate( "local" )( req, res, () => {
+
+          req.flash( "success", `Welcome to YelpCamp, ${user.username}` )
 
           res.redirect( "/campgrounds" )
 

@@ -98,6 +98,9 @@ router.post( "/", middleware.isLoggedIn, ( req, res ) => {
             foundCampground.comments.push( newComment )
             foundCampground.save()
 
+
+            req.flash( "success", "Successfully added new comment" )
+
             res.redirect( `/campgrounds/${foundCampground._id}` )
 
           }
@@ -161,6 +164,8 @@ router.put( "/:comment_id", middleware.isCommentOwner, ( req, res ) => {
 
     } else {
 
+      req.flash( "success", "Updated comment" )
+
       // Redirect to show page
       res.redirect( `/campgrounds/${currentCampground}` )
 
@@ -186,6 +191,8 @@ router.delete( "/:comment_id", middleware.isCommentOwner, ( req, res ) => {
       console.log( `ERROR: ${err}` )
 
     } else {
+
+      req.flash( "success", "Deleted comment" )
 
       //Redirect
       res.redirect( `/campgrounds/${currentCampground}` )
