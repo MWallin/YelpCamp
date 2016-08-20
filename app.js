@@ -97,7 +97,10 @@ app.use( "/campgrounds/:id/comments", commentRoutes )
 // *****************************************************************************
 // Server
 
-app.listen( 3000, function () {
+// Set correct port depending on local or Heroku
+app.set( "port", ( process.env.PORT || 3000 ) );
+
+app.listen( app.get( "port" ), function () {
   console.log( "The YelpCamp server has started" )
 })
 
