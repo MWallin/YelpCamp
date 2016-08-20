@@ -46,8 +46,11 @@ app.use( flash() )
 // *****************************************************************************
 // Database setup + Model imports
 
-mongoose.connect( "mongodb://localhost/yelp_camp" )
+// Local database
+//mongoose.connect( "mongodb://localhost/yelp_camp" )
 
+// mLab database
+mongoose.connect( "mongodb://yc_app:password@ds063715.mlab.com:63715/yelpcamp" )
 
 const User = require( "./models/user" )
 
